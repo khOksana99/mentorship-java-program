@@ -2,6 +2,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+
 public class JavaStreamApi {
     /**
      * #1  min
@@ -74,18 +77,10 @@ public class JavaStreamApi {
     /**
      * #7
      */
-    public List<Integer> getListOfIndexes(List<Data> list) {
+    public Map<String, List<Integer>> getMapNameIndex(List<Data> list) {
         return list.stream()
                 .map(Data::getNodeList)
                 .flatMap(Collection::stream)
-                .map(Node::getIndex)
-                .collect(Collectors.toList());
-    }
-
-    public Map<String, Integer> getMapNameIndex(List<Data> list) {
-        return list.stream()
-                .map(Data::getNodeList)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toMap(Node::getName, Node::getIndex));
+                .collect(Collectors.groupingBy(Node::getName, Collectors.mapping(Node::getIndex, toList())));
     }
 }
